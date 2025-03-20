@@ -22,7 +22,7 @@ Whether you're a developer looking to choose the best sandbox for your projects 
 
 ```bash
 # Clone the repository
-git clone https://github.com/nkkko/ai-sandbox-benchmark.git
+git clone https://github.com/daytonaio/ai-sandbox-benchmark.git
 cd ai-sandbox-benchmark
 
 # Set up a virtual environment (recommended)
@@ -54,35 +54,36 @@ python benchmark.py
 - **Comprehensive Metrics**: Detailed timing for workspace creation, execution, and cleanup
 - **Statistical Analysis**: Mean, standard deviation, and relative performance comparisons
 - **Warmup Runs**: Configurable warmup runs to ensure stable measurements
-- **Daytona Warm Pools**: Support for Daytona's warm sandbox pools for faster startup times
 
 ## ⚡ Performance Comparison Example
+
+A basic performance test running the ls command across different providers. The test included one warmup run followed by three timed executions for measurement.
 
 ```
 ================================================================================
                            Test Configuration Summary
 ================================================================================
 Warmup Runs: 1
-Measurement Runs: 5
-Tests Used (1): 10:test_fft_performance
-Providers Used: daytona, e2b, codesandbox, modal, local
+Measurement Runs: 3
+Tests Used (1): 1:test_list_directory
+Providers Used: daytona, e2b, codesandbox, modal
 ================================================================================
 
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
-| Metric             | Daytona              | E2b                  | Codesandbox           | Modal               | Local               |
-+====================+======================+======================+=======================+=====================+=====================+
-| Workspace Creation | 2202.36ms (±841.17)  | 541.21ms (±179.42)   | 1321.20ms (±165.21)   | 2069.96ms (±356.34) | N/A                 |
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
-| Code Execution     | 8530.80ms (±4136.31) | 9867.52ms (±5219.34) | 17236.60ms (±5602.87) | 6607.10ms (±286.85) | 3427.93ms (±316.08) |
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
-| Internal Execution | 6744.69ms (±3655.03) | 7400.64ms (±3914.51) | 16006.60ms (±5582.63) | 4894.03ms (±141.64) | 2909.96ms (±274.76) |
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
-| Cleanup            | 140.86ms (±4.92)     | 401.25ms (±187.59)   | 6234.00ms (±426.76)   | 3234.96ms (±97.43)  | 0.80ms (±0.81)      |
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
-| Total Time         | 13588.94ms           | 10809.98ms           | 24791.80ms            | 11912.02ms          | 3431.01ms           |
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
-| vs Daytona %       | 0%                   | -20.5%               | +82.4%                | -12.3%              | -74.8%              |
-+--------------------+----------------------+----------------------+-----------------------+---------------------+---------------------+
+
+Performance Comparison for Test 1: test_list_directory
++--------------------+-------------------+--------------------+---------------------+---------------------+
+| Metric             | Daytona           | E2b                | Codesandbox         | Modal               |
++====================+===================+====================+=====================+=====================+
+| Workspace Creation | 168.66ms (±6.83)  | 646.40ms (±259.36) | 1533.00ms (±472.06) | 528.03ms (±42.06)   |
++--------------------+-------------------+--------------------+---------------------+---------------------+
+| Code Execution     | 366.90ms (±76.72) | 267.24ms (±4.63)   | 190.67ms (±4.03)    | 477.98ms (±190.28)  |
++--------------------+-------------------+--------------------+---------------------+---------------------+
+| Cleanup            | 145.81ms (±1.49)  | 738.66ms (±194.46) | 5314.00ms (±62.03)  | 3448.28ms (±215.71) |
++--------------------+-------------------+--------------------+---------------------+---------------------+
+| Total Time         | 681.37ms          | 1652.31ms          | 7037.67ms           | 4454.29ms           |
++--------------------+-------------------+--------------------+---------------------+---------------------+
+| vs Daytona %       | 0%                | +142.5%            | +932.9%             | +553.7%             |
++--------------------+-------------------+--------------------+---------------------+---------------------+
 ```
 
 ## 📈 Metrics & Performance Tracking
@@ -325,47 +326,4 @@ This project is licensed under the [Apache 2.0 License](LICENSE).
   - [Dotenv](https://github.com/theskumar/python-dotenv)
   - [Termcolor](https://pypi.org/project/termcolor/)
   - [Requests](https://requests.readthedocs.io/)
-
-## 📁 Project Structure
-
-```
-ai-sandbox-benchmark
-├── SPECIFICATION.md
-├── metrics.py
-├── comparator.py
-├── benchmark.py     # Terminal UI for benchmarking
-├── migrate_tests.py # Test migration utility
-├── test_rule.py
-├── requirements.txt
-├── providers
-│   ├── daytona.py
-│   ├── codesandbox.py
-│   ├── __init__.py
-│   ├── e2b.py
-│   ├── modal.py
-│   ├── local.py     # Local execution provider
-│   ├── utils.py     # Provider utilities
-│   ├── README.md    # Provider-specific documentation
-│   └── codesandbox-service.js
-├── tests
-│   ├── MIGRATION_GUIDE.md
-│   ├── README.md
-│   ├── __init__.py
-│   ├── test_list_directory.py
-│   ├── test_calculate_primes.py
-│   ├── test_llm_generated_primes.py
-│   ├── test_resource_intensive_calculation.py
-│   ├── test_container_stability.py
-│   ├── test_database_operations.py
-│   ├── test_fft_multiprocessing_performance.py
-│   ├── test_fft_performance.py
-│   ├── test_file_io_performance.py
-│   ├── test_improved_calculate_primes.py
-│   ├── test_optimized_example.py
-│   ├── test_package_installation.py
-│   ├── test_sandbox_utils.py
-│   ├── test_startup_time.py
-│   ├── test_system_info.py
-│   ├── test_template.py
-│   └── test_utils.py
-```
+  -

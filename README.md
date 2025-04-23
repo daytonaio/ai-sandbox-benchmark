@@ -8,7 +8,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/nkkko/ai-sandbox-benchmark/graphs/commit-activity)
 
-Welcome to **AI Sandbox Benchmark** – an open-source, standardized benchmarking framework designed to evaluate and compare various code execution sandbox environments like Daytona, e2b, CodeSandbox, Modal, and others.
+Welcome to **AI Sandbox Benchmark** – an open-source, standardized benchmarking framework designed to evaluate and compare various code execution sandbox environments like Daytona, e2b, CodeSandbox, Modal, Morph, and others.
 
 > **⚠️ Disclaimer:** This project is a work in progress and proof of concept. We are actively working on optimizing performance, improving test coverage, and enhancing the overall user experience. Feedback and contributions are highly welcome!
 
@@ -178,6 +178,8 @@ The benchmark suite now includes performance history tracking that:
    providers:
      daytona:
        default_region: eu
+     morph:
+       # Morph specific settings
    ```
 
 ## 🏃 Usage
@@ -235,7 +237,7 @@ python benchmark.py --cli
   **Default:** `all`
 
 - `--providers` or `-p`: Comma-separated list of providers to test.
-  **Default:** `daytona,e2b,codesandbox,modal,local`
+  **Default:** `daytona,e2b,codesandbox,modal,local,morph`
 
 - `--runs` or `-r`: Number of measurement runs per test/provider.
   **Default:** `10`
@@ -273,6 +275,12 @@ python benchmark.py --cli
 
   ```bash
   python comparator.py --providers local
+  ```
+
+- **Run Tests on Morph Sandbox**
+
+  ```bash
+  python comparator.py --providers morph
   ```
 
 - **Increase Measurement and Warmup Runs**

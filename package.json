@@ -1,0 +1,27 @@
+{
+  "name": "ai-sandbox-benchmark",
+  "version": "1.0.0",
+  "description": "[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![Python Versions](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/) [![GitHub stars](https://img.shields.io/github/stars/nkkko/ai-sandbox-benchmark.svg)](https://github.com/nkkko/ai-sandbox-benchmark/stargazers) [![GitHub forks](https://img.shields.io/github/forks/nkkko/ai-sandbox-benchmark.svg)](https://github.com/nkkko/ai-sandbox-benchmark/network) [![GitHub issues](https://img.shields.io/github/issues/nkkko/ai-sandbox-benchmark.svg)](https://github.com/nkkko/ai-sandbox-benchmark/issues) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/nkkko/ai-sandbox-benchmark/graphs/commit-activity)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daytonaio/ai-sandbox-benchmark.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/daytonaio/ai-sandbox-benchmark/issues"
+  },
+  "homepage": "https://github.com/daytonaio/ai-sandbox-benchmark#readme",
+  "dependencies": {
+    "@codesandbox/sdk": "^0.11.1"
+  }
+}

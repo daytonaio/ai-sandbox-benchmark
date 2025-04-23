@@ -32,7 +32,7 @@ for filename in os.listdir(TESTS_DIR):
                 test_id += 1
 
 # Import providers from separate modules
-from providers import daytona, e2b, codesandbox, modal, local
+from providers import daytona, e2b, codesandbox, modal, local, morph
 
 # Map provider names to their corresponding execute() implementations.
 # Note: the daytona.execute() requires (code, executor, target_region).
@@ -41,7 +41,8 @@ provider_executors = {
     'e2b': e2b.execute,
     'codesandbox': codesandbox.execute,
     'modal': modal.execute,
-    'local': local.execute
+    'local': local.execute,
+    'morph': morph.execute
 }
 
 # Configure logging
@@ -141,7 +142,10 @@ class SandboxExecutor:
             },
             'e2b': {},
             'modal': {},
-            'local': {}
+            'local': {},
+            'morph': {
+                "MORPH_API_KEY": "Morph API key",
+            }
         }
 
         # Determine which required vars to check based on selected providers

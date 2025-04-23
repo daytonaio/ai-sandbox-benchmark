@@ -31,3 +31,7 @@ providers:
     # CodeSandbox specific configuration
   modal:
     # Modal specific configuration
+  morph:
+    # Morph specific configuration
+    # sandbox_ttl_seconds: 300  # Time-to-live for sandbox instances (default: 300 seconds)
+    # Additional configuration options can be added here

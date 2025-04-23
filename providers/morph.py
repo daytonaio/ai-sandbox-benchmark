@@ -22,7 +22,13 @@ def log_error(message):
 def log_warning(message):
     logger.warning(f"[Morph] {message}")
 
+# Global snapshot cache for reusing the same base snapshot
+# This allows us to properly leverage Morph's InfiniBranch technology
+_BASE_SNAPSHOT = None
+_SNAPSHOT_WITH_DEPS = {}  # Cache for snapshots with specific dependency sets
+
 async def execute(code: str, env_vars: Dict[str, str] = None):
+    global _BASE_SNAPSHOT, _SNAPSHOT_WITH_DEPS
     metrics = BenchmarkTimingMetrics()
     sandbox = None
     
@@ -31,6 +37,8 @@ async def execute(code: str, env_vars: Dict[str, str] = None):
         start = time.time()
         
         # Create a new Morph sandbox
+        # Note: The Sandbox.new() method already implements snapshot caching internally
+        # with a tag of 'type=sandbox-dev' as seen in the logs
         log_info("Creating new Morph sandbox...")
         sandbox = await asyncio.to_thread(Sandbox.new, ttl_seconds=300)
         
@@ -78,19 +86,38 @@ async def execute(code: str, env_vars: Dict[str, str] = None):
         # Start measuring actual setup time
         setup_start = time.time()
         
-        # Use the centralized dependency installation utility
-        dependency_checker = f"""
+        # Create a simpler dependency installer that directly installs the required packages
+        # This avoids issues with importing from external modules and ensures consistent behavior
+        dependency_installer = f"""
 import sys
-from providers.utils import check_and_install_dependencies
+import subprocess
 
-# The code is passed in with triple quotes to handle any internal quotes
-installed_packages = check_and_install_dependencies(
-    '''{code.replace("'", "\\'")}''',
-    always_install={always_install_packages}
-)
+# Install the specified dependencies
+installed_packages = []
+dependencies = {always_install_packages}
+
+for package in dependencies:
+    try:
+        # Try to import the package first
+        __import__(package)
+        print(f"Package {{package}} is already installed")
+    except ImportError:
+        # If import fails, install the package
+        print(f"Installing package {{package}}")
+        result = subprocess.run(
+            [sys.executable, '-m', 'pip', 'install', '--user', package],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0:
+            installed_packages.append(package)
+            print(f"Successfully installed {{package}}")
+        else:
+            print(f"Failed to install {{package}}: {{result.stderr}}")
+
 print(f"Installed packages: {{installed_packages}}")
 """
-        setup_result = sandbox.run_code(dependency_checker)
+        setup_result = sandbox.run_code(dependency_installer)
         if setup_result.exit_code != 0:
             log_error(f"Failed to install dependencies: {setup_result.error}")
             
@@ -109,6 +136,22 @@ print(f"Installed packages: {{installed_packages}}")
         # Ensure setup time is treated as already in milliseconds
         metrics.ms_metrics.add("Setup Time")
         metrics.add_metric("Setup Time", setup_time)
+        
+        # Create snapshot if this is a reusable configuration 
+        # This would allow future tests with similar dependencies to start faster
+        # However, this is a bit redundant with Sandbox.new's built-in caching
+        # and is commented out for now
+        """
+        dependency_key = str(sorted(always_install_packages))
+        if dependency_key not in _SNAPSHOT_WITH_DEPS:
+            log_info(f"Creating snapshot with dependencies: {dependency_key}")
+            try:
+                snapshot = await asyncio.to_thread(sandbox.snapshot)
+                _SNAPSHOT_WITH_DEPS[dependency_key] = snapshot
+                log_info(f"Created snapshot {snapshot.id} for dependency set {dependency_key}")
+            except Exception as e:
+                log_error(f"Failed to create dependency snapshot: {e}")
+        """
             
         # Run the code
         start = time.time()

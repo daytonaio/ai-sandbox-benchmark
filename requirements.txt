@@ -37,6 +37,7 @@ markdown-it-py==3.0.0
 marshmallow==3.23.2
 mdurl==0.1.2
 modal==0.73.92
+morphcloud>=0.1.60
 multidict==6.1.0
 mypy-extensions==1.0.0
 numpy==2.2.1

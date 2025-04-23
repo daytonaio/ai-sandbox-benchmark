@@ -11,19 +11,43 @@ The benchmark currently supports the following execution environments:
 - **CodeSandbox** - Browser-based sandbox environment (codesandbox.py)
 - **Modal** - Serverless compute platform (modal.py)
 - **Local** - Local machine execution for baseline comparison (local.py)
+- **Morph** - Morph Cloud platform for secure AI code execution (morph.py)
 
 ## Provider Setup Instructions
 
 ### CodeSandbox
 
-1. **Install Node.js Dependencies and Start the CodeSandbox Service**
+1. **Get a CodeSandbox API Key**
+
+   You need a valid CodeSandbox API key to use this provider:
+   
+   - Create or log in to your account at [codesandbox.io](https://codesandbox.io)
+   - Navigate to [Dashboard > Settings > API Keys](https://codesandbox.io/dashboard/settings/tokens)
+   - Generate a new API token
+   - Add to your `.env` file:
+     ```
+     CSB_API_KEY=your_codesandbox_api_key
+     ```
+     (Note: Valid API keys should start with `csb_` or `csb_v1_`)
+
+2. **Install Node.js Dependencies and Start the CodeSandbox Service**
 
    Before running benchmarks with CodeSandbox, start the CodeSandbox service:
 
    ```bash
-   cd providers && npm install && node providers/codesandbox-service.js
+   cd providers && npm install && node codesandbox-service.js
    ```
    This service handles the communication between the benchmark and the CodeSandbox API.
+
+3. **Troubleshooting 403 Errors**
+
+   If you encounter 403 Forbidden errors when using CodeSandbox:
+   
+   - Your API key may have expired or been revoked
+   - Access the service help page at http://localhost:3000/help for detailed instructions
+   - Test your API key status at http://localhost:3000/test-api-key
+   - Regenerate your API key at [codesandbox.io/dashboard/settings/tokens](https://codesandbox.io/dashboard/settings/tokens)
+   - Update your `.env` file and restart the service
 
 ### Daytona
 
@@ -68,6 +92,24 @@ Modal uses CLI-based authentication instead of API keys:
 
 The local provider runs tests directly on your machine without any additional setup, making it useful for establishing baseline performance.
 
+### Morph
+
+Morph requires an API key for accessing their sandbox environment:
+
+1. Create an account at [cloud.morph.so](https://cloud.morph.so)
+2. Get your API key from https://cloud.morph.so/web/api-keys
+3. Add to your `.env` file:
+   ```
+   # Required
+   MORPH_API_KEY=your_morph_api_key
+   
+   # Optional configuration (uncomment if needed)
+   # MORPH_BASE_URL=https://cloud.morph.so/api  # Default API URL
+   # MORPH_SSH_HOSTNAME=ssh.cloud.morph.so      # Default SSH hostname
+   # MORPH_SSH_PORT=22                          # Default SSH port
+   ```
+4. Install the Morph Cloud SDK: `pip install morphcloud`
+
 ## Provider Configuration
 
 Provider-specific settings can be configured in the `config.yml` file in the project root:
@@ -83,6 +125,8 @@ env_vars:
 providers:
   daytona:
     default_region: eu
+  morph:
+    # Morph specific settings can be added here
 ```
 
 ## Implementation Details
